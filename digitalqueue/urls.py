@@ -5,7 +5,8 @@ from .views import (
     RegisterCustomer,
     QueueList,
     CallNextToken,
-    CompleteToken
+    CompleteToken,
+    CounterList,
 )
 
 urlpatterns = [
@@ -27,4 +28,5 @@ urlpatterns = [
 
     # Complete service
     path('complete/', CompleteToken.as_view(), name='complete-service'),
+    path("counters/", CounterList.as_view()),
 ]

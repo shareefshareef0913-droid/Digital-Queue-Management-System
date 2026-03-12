@@ -5,7 +5,8 @@ from django.utils import timezone
 from datetime import date
 from .models import Organization, Service, Customer, Counter, Token
 from .serializers import (OrganizationSerializer,ServiceSerializer, CustomerSerializer,
-    TokenSerializer
+    TokenSerializer,CounterSerializer
+
 )
 class OrganizationList(APIView):
     def get(self, request):
@@ -45,6 +46,12 @@ class RegisterCustomer(APIView):
 
         service_id = request.data.get("service")
 
+        if not service_id:
+            return Response(
+                {"error": "Service id required"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
         try:
             service = Service.objects.get(id=service_id)
         except Service.DoesNotExist:
@@ -53,13 +60,8 @@ class RegisterCustomer(APIView):
                 status=status.HTTP_404_NOT_FOUND
             )
 
-        # generate token number
-        today = date.today()
-
-        token_count = Token.objects.filter(
-            service=service,
-            created_at__date=today
-        ).count() + 1
+        # generate token number (no date filter)
+        token_count = Token.objects.filter(service=service).count() + 1
 
         token_number = f"{service.service_name[:2].upper()}{token_count}"
 
@@ -82,57 +84,70 @@ class QueueList(APIView):
 
     def get(self, request):
 
-        tokens = Token.objects.filter(
+        serving = Token.objects.filter(
+            status="serving"
+        ).order_by("served_at").first()
+
+        waiting = Token.objects.filter(
             status="waiting"
         ).order_by("created_at")
 
-        serializer = TokenSerializer(
-            tokens,
-            many=True
-        )
+        data = {
+            "serving": TokenSerializer(serving).data if serving else None,
+            "waiting": TokenSerializer(waiting, many=True).data
+        }
 
-        return Response(
-            serializer.data,
-            status=status.HTTP_200_OK
-        )
+        return Response(data, status=status.HTTP_200_OK)
 class CallNextToken(APIView):
 
     def post(self, request):
 
         counter_id = request.data.get("counter")
+        organization_id = request.data.get("organization")
 
-        token = Token.objects.filter(
-            status="waiting"
+        # check if counter already serving
+        active = Token.objects.filter(
+            counter_id=counter_id,
+            status="serving"
         ).first()
+
+        if active:
+            return Response(
+                {"message": "Finish current token first"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # get next token for that organization
+        token = Token.objects.filter(
+            status="waiting",
+            organization_id=organization_id
+        ).order_by("created_at").first()
 
         if not token:
             return Response(
-                {"message": "No tokens in queue"},
+                {"message": "No tokens waiting for this organization"},
                 status=status.HTTP_404_NOT_FOUND
             )
 
         token.status = "serving"
         token.counter_id = counter_id
         token.served_at = timezone.now()
-
         token.save()
 
-        return Response(
-            {
-                "message": "Next token called",
-                "token": token.token_number,
-                "counter": counter_id
-            },
-            status=status.HTTP_200_OK
-        )
+        return Response({
+            "message": "Token called",
+            "token": token.token_number,
+            "counter": counter_id
+        }, status=status.HTTP_200_OK)
 class CompleteToken(APIView):
 
     def post(self, request):
 
-        token_id = request.data.get("token")
+        token_number = request.data.get("token")
 
         try:
-            token = Token.objects.get(id=token_id)
+            token = Token.objects.get(token_number=token_number)
+
         except Token.DoesNotExist:
             return Response(
                 {"error": "Token not found"},
@@ -141,12 +156,29 @@ class CompleteToken(APIView):
 
         token.status = "completed"
         token.completed_at = timezone.now()
-
         token.save()
 
         return Response(
             {"message": "Service completed"},
             status=status.HTTP_200_OK
         )
+class CounterList(APIView):
 
+    def get(self, request):
 
+        org_id = request.GET.get("organization")
+
+        if not org_id:
+            return Response(
+                {"error": "organization id required"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        counters = Counter.objects.filter(
+            organization_id=org_id,
+            status="active"
+        )
+
+        serializer = CounterSerializer(counters, many=True)
+
+        return Response(serializer.data)

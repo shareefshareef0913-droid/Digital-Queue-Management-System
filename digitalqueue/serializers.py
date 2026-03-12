@@ -24,3 +24,8 @@ class TokenSerializer(serializers.ModelSerializer):
     class Meta:
         model = Token
         fields = '__all__'
+class CounterSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Counter
+        fields = "__all__"
