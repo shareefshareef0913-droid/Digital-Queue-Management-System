@@ -1,0 +1,269 @@
+/* ========================================
+   OPERATOR PANEL STYLES
+   ======================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Orbitron:wght@700;900&display=swap');
+
+:root {
+  --op-bg: #080d1a;
+  --op-surface: rgba(255,255,255,0.04);
+  --op-border: rgba(255,255,255,0.08);
+  --op-accent: #4f7cff;
+  --op-green: #10b981;
+  --op-warn: #f59e0b;
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255,255,255,0.6);
+  --text-muted: rgba(255,255,255,0.35);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+.op-page {
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+  background: var(--op-bg);
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(79,124,255,0.18), transparent),
+    radial-gradient(ellipse 50% 40% at 100% 100%, rgba(16,185,129,0.1), transparent);
+  color: var(--text-primary);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.op-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.2rem 2rem;
+  background: rgba(255,255,255,0.03);
+  border-bottom: 1px solid var(--op-border);
+  backdrop-filter: blur(20px);
+}
+
+.op-back-btn {
+  padding: 0.55rem 1.1rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  background: var(--op-surface);
+  border: 1px solid var(--op-border);
+  border-radius: 10px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.op-back-btn:hover {
+  background: rgba(255,255,255,0.08);
+  color: var(--text-primary);
+}
+
+.op-header-center {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  text-align: center;
+}
+
+.op-logo { font-size: 2rem; }
+
+.op-title {
+  font-size: 1.3rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #fff, #a5b4ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.op-org { font-size: 0.82rem; color: var(--text-secondary); margin-top: 2px; }
+
+.op-header-right { width: 120px; }
+
+/* Main */
+.op-main {
+  flex: 1;
+  max-width: 680px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 2.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Message */
+.op-message {
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-align: center;
+  animation: fadein 0.3s ease;
+}
+
+@keyframes fadein { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+
+.op-message.success { background: rgba(16,185,129,0.12); border: 1px solid rgba(16,185,129,0.3); color: #6ee7b7; }
+.op-message.error   { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.25); color: #fca5a5; }
+.op-message.info    { background: rgba(79,124,255,0.1); border: 1px solid rgba(79,124,255,0.25); color: #a5b4ff; }
+
+/* Serving Card */
+.op-serving-card {
+  background: var(--op-surface);
+  border: 1px solid rgba(16,185,129,0.2);
+  border-radius: 20px;
+  padding: 2rem;
+  text-align: center;
+  box-shadow: 0 0 60px rgba(16,185,129,0.08);
+}
+
+.op-card-label {
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--op-green);
+  margin-bottom: 1rem;
+}
+
+.op-token-big {
+  font-family: 'Orbitron', monospace;
+  font-size: 5rem;
+  font-weight: 900;
+  line-height: 1;
+  background: linear-gradient(135deg, #10b981, #4f7cff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.75rem;
+}
+
+.op-token-big.idle { -webkit-text-fill-color: rgba(255,255,255,0.15); }
+
+.op-token-meta { font-size: 0.88rem; color: var(--text-secondary); }
+
+/* Call Next Button */
+.op-call-btn {
+  width: 100%;
+  padding: 1.2rem;
+  font-size: 1.2rem;
+  font-weight: 800;
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(135deg, #4f7cff, #7c3aed);
+  color: #fff;
+  border: none;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 10px 40px rgba(79,124,255,0.35);
+  letter-spacing: 0.01em;
+}
+
+.op-call-btn:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 18px 50px rgba(79,124,255,0.5);
+}
+
+.op-call-btn:active { transform: scale(0.98); }
+.op-call-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* Queue Panel */
+.op-queue-panel {
+  background: var(--op-surface);
+  border: 1px solid var(--op-border);
+  border-radius: 20px;
+  padding: 1.5rem;
+}
+
+.op-queue-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.op-queue-header h2 { font-size: 1rem; font-weight: 700; }
+
+.op-count {
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  background: rgba(79,124,255,0.15);
+  border: 1px solid rgba(79,124,255,0.3);
+  color: #a5b4ff;
+}
+
+.op-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 2rem;
+  color: var(--text-secondary);
+  font-size: 1rem;
+}
+
+.op-empty-icon { font-size: 2rem; }
+
+.op-queue-list { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+
+.op-queue-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--op-border);
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.op-queue-item.next-up {
+  border-color: rgba(245,158,11,0.4);
+  background: rgba(245,158,11,0.06);
+}
+
+.op-item-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.op-item-pos {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  width: 24px;
+}
+
+.op-item-token {
+  font-family: 'Orbitron', monospace;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.op-item-right {
+  margin-left: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.15rem;
+}
+
+.op-item-service { font-size: 0.82rem; color: var(--text-secondary); }
+.op-item-time    { font-size: 0.75rem; color: var(--text-muted); }
+
+.op-next-badge {
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #fcd34d;
+  background: rgba(245,158,11,0.15);
+  border: 1px solid rgba(245,158,11,0.3);
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+}

@@ -7,26 +7,18 @@ from .views import (
     CallNextToken,
     CompleteToken,
     CounterList,
+    AdminLogin,
+    AdminTokenList,
 )
 
 urlpatterns = [
-
-    # Get all organizations
     path('organizations/', OrganizationList.as_view(), name='organizations'),
-
-    # Get services based on selected organization
     path('services/', ServiceList.as_view(), name='services'),
-
-    # Register customer and generate token
     path('register/', RegisterCustomer.as_view(), name='register-customer'),
-
-    # View waiting queue
     path('queue/', QueueList.as_view(), name='queue-list'),
-
-    # Operator calls next token
     path('call-next/', CallNextToken.as_view(), name='call-next'),
-
-    # Complete service
     path('complete/', CompleteToken.as_view(), name='complete-service'),
-    path("counters/", CounterList.as_view()),
+    path('counters/', CounterList.as_view(), name='counters'),
+    path('admin-login/', AdminLogin.as_view(), name='admin-login'),
+    path('admin-tokens/', AdminTokenList.as_view(), name='admin-tokens'),
 ]

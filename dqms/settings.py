@@ -80,9 +80,9 @@ WSGI_APPLICATION = 'dqms.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'digital_queue',
+        'NAME': 'django26',
         'USER': 'root',
-        'PASSWORD':'Chennarao_42',
+        'PASSWORD':'Shareef0913@',
         'HOST':'localhost',
         'PORT':'3306',   
           }
