@@ -60,3 +60,4 @@ A full-stack queue management system (QMS) designed for tokens generation, real-
    npm start  # or npm run dev
    ```
    The frontend should now run locally, typically on `http://localhost:3000/` or `http://localhost:5173/`.
+# project owner shareef
